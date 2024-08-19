@@ -19,9 +19,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 	DWORD screenWidth = GetSystemMetrics(SM_CXSCREEN);
 	DWORD screenHeight = GetSystemMetrics(SM_CYSCREEN);
 	
-	double widthMultiplier = screenWidth / 320.0;
-	double heightMultiplier = screenHeight / 240.0;
-	
 	bool vJoy = true;
 	UINT iInterface = 1;
 	
@@ -58,7 +55,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 	if(!readSettings()) {
 		printf("Couldn't read settings file, using default key bindings.\n");
 	}
-	
+		
+	double widthMultiplier = screenWidth / settings.XArea;
+	double heightMultiplier = screenHeight / settings.YArea;
+
 	initNetwork();
 	
 	char nButtons = GetVJDButtonNumber(iInterface);
@@ -146,11 +146,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 				if((currentKeys & KEY_TOUCH)) {
 					if(keyboardActive) {
 						if(newpress(KEY_TOUCH)) {
+							/* I don't even know what this does but it gives me a compiler error 😇
 							char letter = currentKeyboardKey();
 							if(letter) {
 								simulateKeyNewpress(letter);
 								simulateKeyRelease(letter);
 							}
+							*/
 						}
 					}
 					else if(settings.touch == mouse) {
@@ -160,6 +162,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 							SetCursorPos(p.x + (currentTouch.x - lastTouch.x) * settings.mouseSpeed, p.y + (currentTouch.y - lastTouch.y) * settings.mouseSpeed);
 						}
 						else {
+							if (currentTouch.x > settings.XArea) {
+								currentTouch.x = settings.XArea;
+							}
+
+							if (currentTouch.y > settings.YArea) {
+								currentTouch.y = settings.YArea;
+							}
+
 							SetCursorPos((int)((double)currentTouch.x * widthMultiplier), (int)((double)currentTouch.y * heightMultiplier));
 						}
 					}
