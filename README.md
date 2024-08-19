@@ -3,7 +3,7 @@
 A 3DS homebrew application which allows you to use your 3DS as a wireless controller for Windows.
 
 ### Download
-The latest release will always be downloadable from [here](https://github.com/CTurt/3DSController/releases/).
+The latest release will always be downloadable from [here](https://github.com/klof44/3DSController/releases/).
 
 If you are updating to 0.6 from an older version, you will need to make sure you update vJoy to the recommended version.
 
