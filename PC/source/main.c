@@ -144,18 +144,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 				}
 				
 				if((currentKeys & KEY_TOUCH)) {
+      				/* Causes compile issues (I don't need the keyboard anyways)
 					if(keyboardActive) {
 						if(newpress(KEY_TOUCH)) {
-							/* I don't even know what this does but it gives me a compiler error 😇
 							char letter = currentKeyboardKey();
 							if(letter) {
 								simulateKeyNewpress(letter);
 								simulateKeyRelease(letter);
 							}
-							*/
 						}
 					}
-					else if(settings.touch == mouse) {
+					*/
+					if(settings.touch == mouse) {
 						if(settings.mouseSpeed) {
 							POINT p;
 							GetCursorPos(&p);
@@ -164,13 +164,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmd, int nShow)
 						else {
 							if (currentTouch.x > settings.XArea) {
 								currentTouch.x = settings.XArea;
+							} else if (currentTouch.x < 0) {
+								currentTouch.x = 0;
 							}
-
+							
 							if (currentTouch.y > settings.YArea) {
 								currentTouch.y = settings.YArea;
+							} else if (currentTouch.y < 0) {
+								currentTouch.y = 0;
 							}
-
-							SetCursorPos((int)((double)currentTouch.x * widthMultiplier), (int)((double)currentTouch.y * heightMultiplier));
+							
+							SetCursorPos((int)((double)currentTouch.x / settings.XArea * screenWidth), (int)((double)currentTouch.y / settings.YArea * screenHeight));
 						}
 					}
 					else if(settings.touch == joystick1) {
